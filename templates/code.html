@@ -1,0 +1,2251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthPro - Your Complete Healthcare Solution</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #3b82f6;
+            --secondary-color: #10b981;
+            --accent-color: #8b5cf6;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+            background-color: #f8fafc;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        .sidebar {
+            position: fixed;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            z-index: 1000;
+        }
+        
+        .ai-bot-button {
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .ai-bot-button:hover {
+            transform: scale(1.1);
+        }
+        
+        .ai-bot-chat {
+            position: absolute;
+            right: 80px;
+            bottom: 0;
+            width: 350px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            transform: translateY(100%);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .ai-bot-chat.active {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .page {
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .login-form input {
+            transition: all 0.3s ease;
+        }
+        
+        .login-form input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <!-- AI Assistant Bot (Available on all pages) -->
+    <div class="sidebar">
+        <div class="ai-bot-button" onclick="toggleChat()">
+            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/27ac19e9-dd91-49ca-a8a5-5b6f43fcd48c.png" alt="AI assistant icon showing a friendly robot face with blue and white colors" />
+        </div>
+        <div class="ai-bot-chat" id="aiBotChat">
+            <div class="bg-gray-100 p-4 border-b border-gray-200">
+                <div class="flex items-center">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/1af83608-ba8f-4754-abe9-62a64cf22ecf.png" alt="AI assistant avatar with professional healthcare look" class="rounded-full mr-2" />
+                    <h3 class="font-semibold text-gray-800">Health Assistant</h3>
+                </div>
+            </div>
+            <div class="chat-messages p-4 h-60 overflow-y-auto" id="chatMessages">
+                <div class="message bot mb-3">
+                    <p class="inline-block bg-gray-200 rounded-lg px-4 py-2">Hello! I'm your HealthPro assistant. How can I help you today?</p>
+                </div>
+            </div>
+            <div class="p-4 border-t border-gray-200">
+                <div class="flex">
+                    <input type="text" id="userMessage" placeholder="Type your question..." class="flex-1 border border-gray-300 rounded-l-lg px-4 py-2 focus:outline-none">
+                    <button onclick="sendMessage()" class="bg-blue-500 text-white px-4 py-2 rounded-r-lg hover:bg-blue-600">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Introduction Page -->
+    <div class="page active" id="introPage">
+        <div class="gradient-bg min-h-screen flex flex-col items-center justify-center text-white px-4">
+            <div class="text-center mb-8">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/6900c8b5-8226-4b9e-a277-2ef9af9c1e05.png" alt="HealthPro logo with a modern medical cross symbol and gradient blue-green colors" class="mx-auto mb-6"/>
+                <h1 class="text-5xl font-bold mb-4">HealthPro</h1>
+                <p class="text-xl mb-8">Your comprehensive healthcare solution powered by AI</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mb-12">
+                <div class="feature-card bg-white bg-opacity-10 p-6 rounded-xl backdrop-blur-sm transition-all duration-300">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/0c48a015-15dc-4fe0-b695-8a78618259cb.png" alt="AI icon with brain and medical cross symbol" class="mx-auto mb-4" />
+                    <h3 class="text-xl font-semibold mb-2">AI Diagnostics</h3>
+                    <p class="text-white text-opacity-80">Advanced AI to help predict possible health conditions</p>
+                </div>
+                <div class="feature-card bg-white bg-opacity-10 p-6 rounded-xl backdrop-blur-sm transition-all duration-300">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/0a8ce4d3-64e1-4820-a65a-33090e0d7dc9.png" alt="Medical chart with various health indicators and graphs" class="mx-auto mb-4" />
+                    <h3 class="text-xl font-semibold mb-2">Risk Analysis</h3>
+                    <p class="text-white text-opacity-80">Understand your health risks and prevention strategies</p>
+                </div>
+                <div class="feature-card bg-white bg-opacity-10 p-6 rounded-xl backdrop-blur-sm transition-all duration-300">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/f7d50c0e-0a7f-452e-9e9b-6eba1511303d.png" alt="Digital tablet showing medical records and charts" class="mx-auto mb-4" />
+                    <h3 class="text-xl font-semibold mb-2">E-Reports</h3>
+                    <p class="text-white text-opacity-80">Digitize and analyze your medical records effortlessly</p>
+                </div>
+            </div>
+            <button onclick="navigateTo('loginPage')" class="bg-white text-blue-600 font-bold px-8 py-3 rounded-full hover:bg-gray-100 transition-colors duration-300">Get Started</button>
+        </div>
+    </div>
+
+    <!-- Login/Signup Page -->
+    <div class="page" id="loginPage">
+        <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+            <div class="max-w-md w-full space-y-8">
+                <div class="text-center">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/9c4c49df-c952-435d-aa08-785c99b93a7d.png" alt="HealthPro logo with simplified medical cross icon" class="mx-auto h-20 w-auto"/>
+                    <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+                        Sign in to your account
+                    </h2>
+                    <p class="mt-2 text-center text-sm text-gray-600">
+                        Or <a href="#" onclick="toggleAuthForm()" class="font-medium text-blue-600 hover:text-blue-500">create a new account</a>
+                    </p>
+                </div>
+                <form class="mt-8 space-y-6 login-form" id="loginForm">
+                    <input type="hidden" name="remember" value="true">
+                    <div class="rounded-md shadow-sm space-y-4">
+                        <div>
+                            <label for="email" class="sr-only">Email address</label>
+                            <input id="email" name="email" type="email" autocomplete="email" required class="appearance-none rounded-lg relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Email address">
+                        </div>
+                        <div>
+                            <label for="password" class="sr-only">Password</label>
+                            <input id="password" name="password" type="password" autocomplete="current-password" required class="appearance-none rounded-lg relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Password">
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                            <label for="remember-me" class="ml-2 block text-sm text-gray-900">
+                                Remember me
+                            </label>
+                        </div>
+
+                        <div class="text-sm">
+                            <a href="#" class="font-medium text-blue-600 hover:text-blue-500">
+                                Forgot your password?
+                            </a>
+                        </div>
+                    </div>
+
+                    <div>
+                        <button type="submit" class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            Sign in
+                        </button>
+                    </div>
+                </form>
+                
+                <!-- Sign Up Form (Hidden by Default) -->
+                <form class="mt-8 space-y-6 login-form hidden" id="signupForm">
+                    <input type="hidden" name="remember" value="true">
+                    <div class="rounded-md shadow-sm space-y-4">
+                        <div>
+                            <label for="fullName" class="sr-only">Full Name</label>
+                            <input id="fullName" name="fullName" type="text" autocomplete="name" required class="appearance-none rounded-lg relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Full Name">
+                        </div>
+                        <div>
+                            <label for="signupEmail" class="sr-only">Email address</label>
+                            <input id="signupEmail" name="signupEmail" type="email" autocomplete="email" required class="appearance-none rounded-lg relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Email address">
+                        </div>
+                        <div>
+                            <label for="signupPassword" class="sr-only">Password</label>
+                            <input id="signupPassword" name="signupPassword" type="password" autocomplete="new-password" required class="appearance-none rounded-lg relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Password">
+                        </div>
+                        <div>
+                            <label for="confirmPassword" class="sr-only">Confirm Password</label>
+                            <input id="confirmPassword" name="confirmPassword" type="password" autocomplete="new-password" required class="appearance-none rounded-lg relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Confirm Password">
+                        </div>
+                    </div>
+
+                    <div class="text-sm">
+                        <p class="text-gray-600">
+                            By creating an account, you agree to our <a href="#" class="font-medium text-blue-600 hover:text-blue-500">Terms of Service</a> and <a href="#" class="font-medium text-blue-600 hover:text-blue-500">Privacy Policy</a>.
+                        </p>
+                    </div>
+
+                    <div>
+                        <button type="submit" class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                            Create Account
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Page (After Login) -->
+    <div class="page" id="dashboardPage">
+        <div class="min-h-screen bg-gray-50">
+            <!-- Header -->
+            <header class="bg-white shadow-sm">
+                <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+                    <div class="flex items-center">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/9a691c4b-fdb1-43b8-a8ba-750b19ffc86b.png" alt="Small HealthPro logo" class="h-8 w-8 mr-2" />
+                        <span class="text-xl font-bold text-gray-800">HealthPro</span>
+                    </div>
+                    <nav class="hidden md:flex space-x-8">
+                        <a href="#" class="text-gray-600 hover:text-blue-600 font-medium" onclick="navigateTo('dashboardPage')">Dashboard</a>
+                        <a href="#" class="text-gray-600 hover:text-blue-600 font-medium" onclick="navigateTo('diseasePredictorPage')">AI Predictor</a>
+                        <a href="#" class="text-gray-600 hover:text-blue-600 font-medium" onclick="navigateTo('riskAnalysisPage')">Risk Analysis</a>
+                        <a href="#" class="text-gray-600 hover:text-blue-600 font-medium" onclick="navigateTo('eReportsPage')">E-Reports</a>
+                        <a href="#" class="text-gray-600 hover:text-blue-600 font-medium" onclick="navigateTo('dietPlansPage')">Diet Plans</a>
+                    </nav>
+                    <div class="flex items-center space-x-4">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/cb74a76b-4eb9-46aa-bd1e-268c438dd247.png" alt="User profile icon" class="h-8 w-8 rounded-full" />
+                        <button onclick="navigateTo('loginPage')" class="text-gray-600 hover:text-blue-600">Logout</button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Content -->
+            <main class="container mx-auto px-4 py-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Quick Access Cards -->
+                    <div class="col-span-1">
+                        <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+                            <h2 class="text-xl font-semibold mb-4">Quick Actions</h2>
+                            <div class="space-y-3">
+                                <button onclick="navigateTo('diseasePredictorPage')" class="w-full text-left px-4 py-3 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors">AI Disease Predictor</button>
+                                <button onclick="navigateTo('riskAnalysisPage')" class="w-full text-left px-4 py-3 bg-green-50 text-green-600 rounded-lg hover:bg-green-100 transition-colors">Health Risk Analysis</button>
+                                <button onclick="navigateTo('eReportsPage')" class="w-full text-left px-4 py-3 bg-purple-50 text-purple-600 rounded-lg hover:bg-purple-100 transition-colors">Upload E-Reports</button>
+                                <button onclick="navigateTo('consultationPage')" class="w-full text-left px-4 py-3 bg-yellow-50 text-yellow-600 rounded-lg hover:bg-yellow-100 transition-colors">E-Consultation</button>
+                                <button onclick="navigateTo('locationsPage')" class="w-full text-left px-4 py-3 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors">Nearby Facilities</button>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl shadow-sm p-6">
+                            <h2 class="text-xl font-semibold mb-4">Health Summary</h2>
+                            <div class="space-y-4">
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-sm font-medium text-gray-700">Heart Health</span>
+                                        <span class="text-sm font-medium text-blue-600">Good</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                        <div class="bg-blue-600 h-2.5 rounded-full" style="width: 85%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-sm font-medium text-gray-700">Diabetes Risk</span>
+                                        <span class="text-sm font-medium text-yellow-600">Medium</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                        <div class="bg-yellow-400 h-2.5 rounded-full" style="width: 45%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-sm font-medium text-gray-700">BMI</span>
+                                        <span class="text-sm font-medium text-green-600">24.7</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                        <div class="bg-green-500 h-2.5 rounded-full" style="width: 65%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Main Dashboard Content -->
+                    <div class="col-span-2">
+                        <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+                            <div class="flex justify-between items-center mb-6">
+                                <h2 class="text-2xl font-bold text-gray-800">Welcome to HealthPro</h2>
+                                <div class="relative">
+                                    <input type="text" placeholder="Search health topics..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/45fd7fc7-6448-48f9-a478-3dd1f8b5357e.png" alt="Search icon" class="absolute left-3 top-2.5 h-5 w-5 text-gray-400"/>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                                <div class="bg-blue-50 p-6 rounded-xl">
+                                    <div class="flex items-center mb-4">
+                                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/1496c910-2f97-4f93-9d5c-ef2f7aa72d0c.png" alt="Medical appointment icon" class="h-10 w-10 mr-4"/>
+                                        <h3 class="text-lg font-semibold">Upcoming Appointments</h3>
+                                    </div>
+                                    <div class="space-y-3">
+                                        <div class="flex items-center justify-between bg-white p-3 rounded-lg">
+                                            <div>
+                                                <p class="font-medium">Dr. Sarah Johnson</p>
+                                                <p class="text-sm text-gray-600">Cardiologist</p>
+                                            </div>
+                                            <p class="text-sm text-grayPACIFIC-700">June 15, 10:30 AM</p>
+                                        </div>
+                                        <div class="flex items-center justify-between bg-white p-3 rounded-lg">
+                                            <div>
+                                                <p class="font-medium">Dr. Michael Chen</p>
+                                                <p class="text-sm text-gray-600">Dermatologist</p>
+                                            </div>
+                                            <p class="text-sm text-gray-700">June 20, 2:00 PM</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-green-50 p-6 rounded-xl">
+                                    <div class="flex items-center mb-4">
+                                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/5ad79ef0-1dc1-44ad-937f-2db65279cde5.png" alt="Medication reminder icon" class="h-10 w-10 mr-4"/>
+                                        <h3 class="text-lg font-semibold">Medication Reminders</h3>
+                                    </div>
+                                    <div class="space-y-3">
+                                        <div class="flex items-center justify-between bg-white p-3 rounded-lg">
+                                            <div>
+                                                <p class="font-medium">Metformin</p>
+                                                <p class="text-sm text-gray-600">500mg, 1 tablet</p>
+                                            </div>
+                                            <p class="text-sm text-gray-700">8:00 AM, 6:00 PM</p>
+                                        </div>
+                                        <div class="flex items-center justify-between bg-white p-3 rounded-lg">
+                                            <div>
+                                                <p class="font-medium">Amiodarone</p>
+                                                <p class="text-sm text-gray-600">200mg, 1 tablet</p>
+                                            </div>
+                                            <p class="text-sm text-gray-700">9:00 AM</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-6 rounded-xl mb-6">
+                                <h3 class="text-xl font-semibold mb-2">Your Health Score</h3>
+                                <div class="flex items-end justify-between">
+                                    <div>
+                                        <p class="text-5xl font-bold">82<span class="text-3xl text-blue-200">/100</span></p>
+                                        <p class="text-blue-100">Better than 75% of people your age</p>
+                                    </div>
+                                    <button onclick="navigateTo('riskAnalysisPage')" class="bg-white text-blue-600 px-4 py-2 rounded-lg font-medium hover:bg-blue-50 transition-colors">Improve My Score</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl shadow-sm p-6">
+                            <h2 class="text-xl font-semibold mb-4">Recent Activities</h2>
+                            <div class="space-y-4">
+                                <div class="flex items-start">
+                                    <div class="bg-blue-100 rounded-full p-2 mr-4">
+                                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/5c0b87f2-3156-4590-9f01-c1d81f9eec5a.png" alt="Activity icon" class="h-5 w-5"/>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium">Completed heart health assessment</p>
+                                        <p class="text-sm text-gray-600">2 hour ago • <a href="#" class="text-blue-600 hover:underline">View results</a></p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start">
+                                    <div class="bg-green-100 rounded-full p-2 mr-4">
+                                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/136294fd-9800-4eff-adcd-fdedbd167c2e.png" alt="Activity icon" class="h-5 w-5"/>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium">Uploaded latest lab results</p>
+                                        <p class="text-sm text-gray-600">Yesterday • <a href="#" class="text-blue-600 hover:underline">View analysis</a></p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start">
+                                    <div class="bg-purple-100 rounded-full p-2 mr-4">
+                                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/a546b26d-5c50-4dc8-8e6e-e2546da563d6.png" alt="Activity icon" class="h-5 w-5"/>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium">Received diet plan recommendation</p>
+                                        <p class="text-sm text-gray-600">3 days ago • <a href="#" class="text-blue-600 hover:underline">Explore plan</a></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- AI Disease Predictor Page -->
+    <div class="page" id="diseasePredictorPage">
+        <div class="min-h-screen bg-gray-50">
+            <!-- Header -->
+            <header class="bg-white shadow-sm">
+                <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+                    <div class="flex items-center">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/34a21505-4c3b-4367-950c-23d9b0915b7c.png" alt="Small HealthPro logo" class="h-8 w-8 mr-2" />
+                        <span class="text-xl font-bold text-gray-800">HealthPro</span>
+                    </div>
+                    <nav class="hidden md:flex space-x-8">
+                        <a href="#" class="text-gray-600 hover:text-blue-600 font-medium" onclick="navigateTo('dashboardPage')">Dashboard</a>
+                        <a href="#" class="text-blue-600 font-medium" onclick="navigateTo('diseasePredictorPage')">AI Predictor</a>
+                        <a href="#" class="text-gray-600 hover:text-blue-600 font-medium" onclick="navigateTo('riskAnalysisPage')">Risk Analysis</a>
+                        <a href="#" class="text-gray-600 hover:text-blue-600 font-medium" onclick="navigateTo('eReportsPage')">E-Reports</a>
+                        <a href="#" class="text-gray-600 hover:text-blue-600 font-medium" onclick="navigateTo('dietPlansPage')">Diet Plans</a>
+                    </nav>
+                    <div class="flex items-center space-x-4">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/5c46ab6d-4310-4f47-a1ab-983a55a92d48.png" alt="User profile icon" class="h-8 w-8 rounded-full" />
+                        <button onclick="navigateTo('loginPage')" class="text-gray-600 hover:text-blue-600">Logout</button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Content -->
+            <main class="container mx-auto px-4 py-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Symptom Input -->
+                    <div class="col-span-1">
+                        <div class="bg-white rounded-xl shadow-sm p-6">
+                            <h2 class="text-xl font-semibold mb-4">Describe Your Symptoms</h2>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 mb-2">Main Symptom</label>
+                                <select class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                    <option>Select...</option>
+                                    <option>Headache</option>
+                                    <option>Fever</option>
+                                    <option>Cough</option>
+                                    <option>Fatigue</option>
+                                    <option>Nausea</option>
+                                    <option>Dizziness</option>
+                                </select>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 mb-2">Additional Symptoms</label>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <label class="flex items-center"><input type="checkbox" class="mr-2"> Fever</label>
+                                    <label class="flex items-center"><input type="checkbox" class="mr-2"> Chills</label>
+                                    <label class="flex items-center"><input type="checkbox" class="mr-2"> Cough</label>
+                                    <label class="flex items-center"><input type="checkbox" class="mr-2"> Shortness of breath</label>
+                                    <label class="flex items-center"><input type="checkbox" class="mr-2"> Fatigue</label>
+                                    <label class="flex items-center"><input type="checkbox" class="mr-2"> Muscle aches</label>
+                                    <label class="flex items-center"><input type="checkbox" class="mr-2"> Headache</label>
+                                    <label class="flex items-center"><input type="checkbox" class="mr-2"> Sore throat</label>
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 mb-2">Duration</label>
+                                <select class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                    <option>Less than 1 day</option>
+                                    <option>1-3 days</option>
+                                    <option>4-7 days</option>
+                                    <option>1-2 weeks</option>
+                                    <option>More than 2 weeks</option>
+                                </select>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 mb-2">Severity</label>
+                                <select class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                    <option>Mild (doesn't interfere with activities)</option>
+                                    <option>Moderate (some interference with activities)</option>
+                                    <option>Severe (prevents daily activities)</option>
+                                </select>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 mb-2">Notes</label>
+                                <textarea class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" rows="3" placeholder="Any additional details about your symptoms..."></textarea>
+                            </div>
+                            <button class="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors">Analyze Symptoms</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Prediction Results -->
+                    <div class="col-span-2">
+                        <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+                            <div class="flex items-center justify-between mb-6">
+                                <h2 class="text-2xl font-bold text-gray-800">Possible Conditions</h2>
+                                <button class="flex items-center text-blue-600 hover:text-blue-800">
+                                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/d439a581-0265-4914-b7b6-b2c42c67edd0.png" alt="Share icon" class="mr-1 h-5 w-5"/>
+                                    Share Results
+                                </button>
+                            </div>
+                            
+                            <div class="space-y-4 mb-8">
+                                <!-- Result Item 1 -->
+                                <div class="border border-gray-200 rounded-xl p-4 hover:border-blue-400 transition-colors">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <h3 class="text-lg font-semibold text-gray-800">Influenza (Flu)</h3>
+                                        <span class="px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full">76% match</span>
+                                    </div>
+                                    <p class="text-gray-600 mb-3">A viral infection that attacks your respiratory system — your nose, throat and lungs.</p>
+                                    <div class="flex mb-3">
+                                        <div class="mr-4">
+                                            <p class="text-xs text-gray-500">Severity</p>
+                                            <p class="font-medium">Moderate</p>
+                                        </div>
+                                        <div class="mr-4">
+                                            <p class="text-xs text-gray-500">Urgency</p>
+                                            <p class="font-medium">See doctor in 1-2 days</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs text-gray-500">Contagious</p>
+                                            <p class="font-medium">Yes</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex space-x-3">
+                                        <button class="text-blue-600 hover:text-blue-800 font-medium text-sm">Treatment Options</button>
+                                        <button class="text-blue-600 hover:text-blue-800 font-medium text-sm">Prevention Tips</button>
+                                        <button class="text-blue-600 hover:text-blue-800 font-medium text-sm">Find Doctors</button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Result Item 2 -->
+                                <div class="border border-gray-200 rounded-xl p-4 hover:border-blue-400 transition-colors">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <h3 class="text-lg font-semibold text-gray-800">Common Cold</h3>
+                                        <span class="px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full">64% match</span>
+                                    </div>
+                                    <p class="text-gray-600 mb-3">A mild viral infection of the nose and throat with symptoms like sore throat, runny nose, and cough.</p>
+                                    <div class="flex mb-3">
+                                        <div class="mr-4">
+                                            <p class="text-xs text-gray-500">Severity</p>
+                                            <p class="font-medium">Mild</p>
+                                        </div>
+                                        <div class="mr-4">
+                                            <p class="text-xs text-gray-500">Urgency</p>
+                                            <p class="font-medium">Self-care</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs text-gray-500">Contagious</p>
+                                            <p class="font-medium">Yes</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex space-x-3">
+                                        <button class="text-blue-600 hover:text-blue-800 font-medium text-sm">Treatment Options</button>
+                                        <button class="text-blue-600 hover:text-blue-800 font-medium text-sm">Home Remedies</button>
+                                        <button class="text-blue-600 hover:text-blue-800 font-medium text-sm">When to See Doctor</button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Result Item 3 -->
+                                <div class="border border-gray-200 rounded-xl p-4 hover:border-blue-400 transition-colors">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <h3 class="text-lg font-semibold text-gray-800">COVID-19</h3>
+                                        <span class="px-3 py-1 bg-red-100 text-red-800 text-sm font-medium rounded-full">42% match</span>
+                                    </div>
+                                    <p class="text-gray-600 mb-3">A contagious respiratory illness caused by infection with the SARS-CoV-2 virus.</p>
+                                    <div class="flex mb-3">
+                                        <div class="mr-4">
+                                            <p class="text-xs text-gray-500">Severity</p>
+                                            <p class="font-medium">Varies</p>
+                                        </div>
+                                        <div class="mr-4">
+                                            <p class="text-xs text-gray-500">Urgency</p>
+                                            <p class="font-medium">Get tested ASAP</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs text-gray-500">Contagious</p>
+                                            <p class="font-medium">Highly</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex space-x-3">
+                                        <button class="text-blue-600 hover:text-blue-800 font-medium text-sm">Testing Locations</button>
+                                        <button class="text-blue-600 hover:text-blue-800 font-medium text-sm">Isolation Guidance</button>
+                                        <button class="text-blue-600 hover:text-blue-800 font-medium text-sm">Vaccine Info</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-blue-50 rounded-xl p-4">
+                                <h3 class="text-lg font-semibold mb-3">Recommended Next Steps</h3>
+                                <ol class="list-decimal list-inside space-y-2">
+                                    <li>Rest and drink plenty of fluids</li>
+                                    <li>Take over-the-counter pain relievers for fever and aches</li>
+                                    <li>Consider getting a flu test in the next 48 hours if symptoms worsen</li>
+                                    <li>Practice good respiratory hygiene to prevent spreading illness</li>
+                                    <li>Seek immediate care if you develop difficulty breathing or chest pain</li>
+                                </ol>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl shadow-sm p-6">
+                            <h2 class="text-xl font-semibold mb-4">Potential Related Conditions</h2>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                <div class="border border-gray-200 rounded-lg p-3 text-center">
+                                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/72fd6fb4-c609-4d8d-b107-0a7cc11d68c1.png" alt="Sinusitis icon" class="mx-auto mb-2 h-10 w-10"/>
+                                    <p class="text-sm font-medium">Sinusitis</p>
+                                    <p class="text-xs text-gray-600">32% match</p>
+                                </div>
+                                <div class="border border-gray-200 rounded-lg p-3 text-center">
+                                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/25d94871-f1e2-4f9d-84b1-0ca688307a1d.png" alt="Strep throat icon" class="mx-auto mb-2 h-10 w-10"/>
+                                    <p class="text-sm font-medium">Strep Throat</p>
+                                    <p class="text-xs text-gray-600">28% match</p>
+                                </div>
+                                <div class="border border-gray-200 rounded-lg p-3 text-center">
+                                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/1bd1f3c7-93e9-44e0-a2a4-ee2ae635a8c5.png" alt="Bronchitis icon" class="mx-auto mb-2 h-10 w-10"/>
+                                    <p class="text-sm font-medium">Bronchitis</p>
+                                    <p class="text-xs text-gray-600">25% match</p>
+                                </div>
+                                <div class="border border-gray-200 rounded-lg p-3 text-center">
+                                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/1c80b95e-f99a-4426-8797-e4687f982946.png" alt="Allergies icon" class="mx-auto mb-2 h-10 w-10"/>
+                                    <p class="text-sm font-medium">Allergies</p>
+                                    <p class="text-xs text-gray-600">21% match</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- AI Risk Analysis Page -->
+    <div class="page" id="riskAnalysisPage">
+        <div class="min-h-screen bg-gray-50">
+            <!-- Header -->
+            <header class="bg-white shadow-sm">
+                <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+                    <div class="flex items-center">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/36c48c7b-8d47-4536-9bbc-cdd4cae7ab44.png" alt="Small HealthPro logo" class="h-8 w-8 mr-2" />
+                        <span class="text-xl font-bold text-gray-800">HealthPro</span>
+                    </div>
+                    <nav class="hidden md:flex space-x-8">
+                        <a href="#" class="text-gray-600 hover:text-blue-600 font-medium" onclick="navigateTo('dashboardPage')">Dashboard</a>
+                        <a href="#" class="text-gray-600 hover:text-blue-600 font-medium" onclick="navigateTo('diseasePredictorPage')">AI Predictor</a>
+                        <a href="#" class="text-blue-600 font-medium" onclick="navigateTo('riskAnalysisPage')">Risk Analysis</a>
+                        <a href="#" class="text-gray-600 hover:text-blue-600 font-medium" onclick="navigateTo('eReportsPage')">E-Reports</a>
+                        <a href="#" class="text-gray-600 hover:text-blue-600 font-medium" onclick="navigateTo('dietPlansPage')">Diet Plans</a>
+                    </nav>
+                    <div class="flex items-center space-x-4">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/5fd3708a-e2a0-4c2c-b6a5-d3a910467e63.png" alt="User profile icon" class="h-8 w-8 rounded-full" />
+                        <button onclick="navigateTo('loginPage')" class="text-gray-600 hover:text-blue-600">Logout</button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Content -->
+            <main class="container mx-auto px-4 py-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Risk Assessment Form -->
+                    <div class="col-span-1">
+                        <div class="bg-white rounded-xl shadow-sm p-6">
+                            <h2 class="text-xl font-semibold mb-4">Health Risk Assessment</h2>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 mb-2">Age</label>
+                                <input type="number" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 mb-2">Gender</label>
+                                <select class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                    <option>Male</option>
+                                    <option>Female</option>
+                                    <option>Other</option>
+                                </select>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 mb-2">Weight (kg)</label>
+                                <input type="number" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 mb-2">Height (cm)</label>
+                                <input type="number" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 mb-2">Blood Pressure</label>
+                                <div class="flex space-x-2">
+                                    <input type="number" placeholder="Systolic" class="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                    <span class="flex items-center">/</span>
+                                    <input type="number" placeholder="Diastolic" class="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 mb-2">Family History</label>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <label class="flex items-center"><input type="checkbox" class="mr-2"> Diabetes</label>
+                                    <label class="flex items-center"><input type="checkbox" class="mr-2"> Heart Disease</label>
+                                    <label class="flex items-center"><input type="checkbox" class="mr-2"> High BP</label>
+                                    <label class="flex items-center"><input type="checkbox" class="mr-2"> Stroke</label>
+                                    <label class="flex items-center"><input type="checkbox" class="mr-2"> Cancer</label>
+                                    <label class="flex items-center"><input type="checkbox" class="mr-2"> Alzheimer's</label>
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 mb-2">Lifestyle Factors</label>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <label class="flex items-center"><input type="checkbox" class="mr-2"> Smoker</label>
+                                    <label class="flex items-center"><input type="checkbox" class="mr-2"> Alcohol</label>
+                                    <label class="flex items-center"><input type="checkbox" class="mr-2"> Sedentary</label>
+                                    <label class="flex items-center"><input type="checkbox" class="mr-2"> High Stress</label>
+                                    <label class="flex items-center"><input type="checkbox" class="mr-2"> Poor Sleep</label>
+                                    <label class="flex items-center"><input type="checkbox" class="mr-2"> Fast Food</label>
+                                </div>
+                            </div>
+                            <button class="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors">Analyze Risk Factors</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Risk Analysis Results -->
+                    <div class="col-span-2">
+                        <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+                            <div class="flex items-center justify-between mb-6">
+                                <h2 class="text-2xl font-bold text-gray-800">Your Health Risk Profile</h2>
+                                <div class="flex items-center text-blue-600">
+                                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/fff8cf89-18d5-4311-b04f-0597ef996d40.png" alt="Download icon" class="mr-1 h-5 w-5"/>
+                                    Download Report
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                                <!-- Cardiovascular Risk -->
+                                <div class="border border-blue-200 rounded-xl p-4 bg-blue-50">
+                                    <div class="flex items-center mb-3">
+                                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/9d8b383e-d939-4c36-b207-d8f0dcc66cee.png" alt="Heart icon" class="mr-3 h-7 w-7"/>
+                                        <h3 class="text-lg font-semibold">Cardiovascular Disease</h3>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="flex justify-between mb-1">
+                                            <span class="text-sm font-medium text-gray-700">Your Risk</span>
+                                            <span class="text-sm font-medium text-red-600">Elevated (32%)</span>
+                                        </div>
+                                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                            <div class="bg-red-500 h-2.5 rounded-full" style="width: 32%"></div>
+                                        </div>
+                                    </div>
+                                    <p class="text-sm text-gray-600 mb-3">Your risk is higher than 68% of people your age, mainly due to family history of heart disease and elevated blood pressure readings.</p>
+                                    <button class="text-blue-600 hover:text-blue-800 font-medium text-sm">Reduction Plan</button>
+                                </div>
+                                
+                                <!-- Diabetes Risk -->
+                                <div class="border border-yellow-200 rounded-xl p-4 bg-yellow-50">
+                                    <div class="flex items-center mb-3">
+                                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/4d901f4b-f68e-4f7f-b2a6-638b1c3d784c.png" alt="Blood sugar icon" class="mr-3 h-7 w-7"/>
+                                        <h3 class="text-lg font-semibold">Type 2 Diabetes</h3>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="flex justify-between mb-1">
+                                            <span class="text-sm font-medium text-gray-700">Your Risk</span>
+                                            <span class="text-sm font-medium text-yellow-600">Moderate (18%)</span>
+                                        </div>
+                                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                            <div class="bg-yellow-400 h-2.5 rounded-full" style="width: 18%"></div>
+                                        </div>
+                                    </div>
+                                    <p class="text-sm text-gray-600 mb-3">Your risk is higher than 42% of people your age. Prediabetes indicators detected in recent blood tests suggest preventive measures.</p>
+                                    <button class="text-blue-600 hover:text-blue-800 font-medium text-sm">Prevention Plan</button>
+                                </div>
+                                
+                                <!-- Cancer Risk -->
+                                <div class="border border-purple-200 rounded-xl p-4 bg-purple-50">
+                                    <div class="flex items-center mb-3">
+                                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/a0e4419a-9c6e-4ffc-8e9b-3dffe5e31735.png" alt="Cancer ribbon icon" class="mr-3 h-7 w-7"/>
+                                        <h3 class="text-lg font-semibold">Cancer</h3>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="flex justify-between mb-1">
+                                            <span class="text-sm font-medium text-gray-700">Your Risk</span>
+                                            <span class="text-sm font-medium text-purple-600">Low (8%)</span>
+                                        </div>
+                                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                            <div class="bg-purple-500 h-2.5 rounded-full" style="width: 8%"></div>
+                                        </div>
+                                    </div>
+                                    <p class="text-sm text-gray-600 mb-3">Your overall cancer risk is relatively low. Regular screenings recommended based on age and family history.</p>
+                                    <button class="text-blue-600 hover:text-blue-800 font-medium text-sm">Screening Plan</button>
+                                </div>
+                                
+                                <!-- Stroke Risk -->
+                                <div class="border border-red-200 rounded-xl p-4 bg-red-50">
+                                    <div class="flex items-center mb-3">
+                                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/fad85ad4-8f23-4bc3-93d4-4e84ca302b80.png" alt="Brain icon" class="mr-3 h-7 w-7"/>
+                                        <h3 class="text-lg font-semibold">Stroke</h3>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="flex justify-between mb-1">
+                                            <span class="text-sm font-medium text-gray-700">Your Risk</span>
+                                            <span class="text-sm font-medium text-red-700">Elevated (15%)</span>
+                                        </div>
+                                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                            <div class="bg-red-600 h-2.5 rounded-full" style="width: 15%"></div>
+                                        </div>
+                                    </div>
+                                    <p class="text-sm text-gray-600 mb-3">Your stroke risk is elevated primarily due to high blood pressure readings and family history.</p>
+                                    <button class="text-blue-600 hover:text-blue-800 font-medium text-sm">Reduction Plan</button>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-blue-50 rounded-xl p-4 mb-6">
+                                <h3 class="text-lg font-semibold mb-4">Personalized Health Recommendations</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div class="bg-white p-4 rounded-lg">
+                                        <div class="flex items-center mb-2">
+                                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/7b846149-d365-4ad4-8c37-dd5fa30b6e80.png" alt="Exercise icon" class="mr-2 h-5 w-5"/>
+                                            <h4 class="font-medium">Exercise Routine</h4>
+                                        </div>
+                                        <p class="text-sm text-gray-600">Aim for at least 150 minutes of moderate aerobic activity or 75 minutes of vigorous activity weekly.</p>
+                                    </div>
+                                    <div class="bg-white p-4 rounded-lg">
+                                        <div class="flex items-center mb-2">
+                                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/fcea8626-0608-47bb-a3a8-be6f14c3954d.png" alt="Nutrition icon" class="mr-2 h-5 w-5"/>
+                                            <h4 class="font-medium">Diet Adjustments</h4>
+                                        </div>
+                                        <p class="text-sm text-gray-600">Reduce sodium intake to less than 2,300 mg per day and increase consumption of whole grains and vegetables.</p>
+                                    </div>
+                                    <div class="bg-white p-4 rounded-lg">
+                                        <div class="flex items-center mb-2">
+                                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/107b5ec7-d3f9-4692-bd28-97743697f581.png" alt="Medical icon" class="mr-2 h-5 w-5"/>
+                                            <h4 class="font-medium">Medical Screenings</h4>
+                                        </div>
+                                        <p class="text-sm text-gray-600">Schedule an annual lipid panel and hemoglobin A1C test to monitor cardiovascular and diabetes risks.</p>
+                                    </div>
+                                    <div class="bg-white p-4 rounded-lg">
+                                        <div class="flex items-center mb-2">
+                                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/d09bd54a-0f64-44bd-b24f-3b67a75a21c2.png" alt="Stress icon" class="mr-2 h-5 w-5"/>
+                                            <h4 class="font-medium">Stress Management</h4>
+                                        </div>
+                                        <p class="text-sm text-gray-600">Practice mindfulness techniques for 10-15 minutes daily to reduce cortisol levels and blood pressure.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white rounded-xl shadow-sm p-6">
+                                <h2 class="text-xl font-semibold mb-4">Projected Health Outlook</h2>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div class="bg-blue-50 p-4 rounded-xl text-center">
+                                        <p class="text-4xl font-bold text-blue-600 mb-2">92%</p>
+                                        <p class="text-sm text-gray-600">Current likelihood of maintaining good health</p>
+                                    </div>
+                                    <div class="bg-yellow-50 p-4 rounded-xl text-center">
+                                        <p class="text-4xl font-bold text-yellow-600 mb-2">76%</p>
+                                        <p class="text-sm text-gray-600">With current lifestyle in 5 years</p>
+                                    </div>
+                                    <div class="bg-green-50 p-4 rounded-xl text-center">
+                                        <p class="text-4xl font-bold text-green-600 mb-2">88%</p>
+                                        <p class="text-sm text-gray-600">With recommended improvements in 5 years</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- E-Reports Analysis Page -->
+    <div class="page" id="eReportsPage">
+        <div class="min-h-screen bg-gray-50">
+            <!-- Header -->
+            <header class="bg-white shadow-sm">
+                <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+                    <div class="flex items-center">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/02356a1f-da4a-4dd8-991a-97c1ccc0fa40.png" alt="Small HealthPro logo" class="h-8 w-8 mr-2" />
+                        <span class="text-xl font-bold text-gray-800">HealthPro</span>
+                    </div>
+                    <nav class="hidden md:flex space-x-8">
+                        <a href="#" class="text-gray-600 hover:text-blue-600 font-medium" onclick="navigateTo('dashboardPage')">Dashboard</a>
+                        <a href="#" class="text-gray-600 hover:text-blue-600 font-medium" onclick="navigateTo('diseasePredictorPage')">AI Predictor</a>
+                        <a href="#" class="text-gray-600 hover:text-blue-600 font-medium" onclick="navigateTo('riskAnalysisPage')">Risk Analysis</a>
+                        <a href="#" class="text-blue-600 font-medium" onclick="navigateTo('eReportsPage')">E-Reports</a>
+                        <a href="#" class="text-gray-600 hover:text-blue-600 font-medium" onclick="navigateTo('dietPlansPage')">Diet Plans</a>
+                    </nav>
+                    <div class="flex items-center space-x-4">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/f04b9e3e-a9e7-4922-ad0e-d980de64075a.png" alt="User profile icon" class="h-8 w-8 rounded-full" />
+                        <button onclick="navigateTo('loginPage')" class="text-gray-600 hover:text-blue-600">Logout</button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Content -->
+            <main class="container mx-auto px-4 py-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Report Upload -->
+                    <div class="col-span-1">
+                        <div class="bg-white rounded-xl shadow-sm p-6">
+                            <h2 class="text-xl font-semibold mb-4">Upload New Reports</h2>
+                            <div class="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center mb-4">
+                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/645af793-8dab-4d40-8c10-4cd60194dbd7.png" alt="Upload icon" class="mx-auto mb-3"/>
+                                <p class="text-gray-500 mb-2">Drag & drop files here or</p>
+                                <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Browse Files</button>
+                                <p class="text-xs text-gray-400 mt-2">Supported formats: PDF, JPG, PNG (Max 10MB each)</p>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="block text-gray-700 mb-2">Report Type</label>
+                                <select class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                    <option>Select report type...</option>
+                                    <option>Blood Test</option>
+                                    <option>Urine Test</option>
+                                    <option>X-Ray</option>
+                                    <option>MRI/CT Scan</option>
+                                    <option>Doctor's Note</option>
+                                    <option>Prescription</option>
+                                    <option>Other</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="block text-gray-700 mb-2">Date of Test</label>
+                                <input type="date" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="block text-gray-700 mb-2">Notes</label>
+                                <textarea class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" rows="3" placeholder="Any additional notes about this report..."></textarea>
+                            </div>
+                            
+                            <button class="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors">Upload Report</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Report Analysis -->
+                    <div class="col-span-2">
+                        <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+                            <div class="flex items-center justify-between mb-6">
+                                <h2 class="text-2xl font-bold text-gray-800">Your Medical Reports</h2>
+                                <button class="flex items-center text-blue-600 hover:text-blue-800">
+                                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/1156ac29-0f45-4cfa-99dd-bd3522b0da42.png" alt="Share icon" class="mr-1 h-5 w-5"/>
+                                    Share Reports
+                                </button>
+                            </div>
+                            
+                            <div class="mb-6">
+                                <div class="flex space-x-4 mb-4">
+                                    <button class="px-4 py-2 bg-blue-600 text-white rounded-lg font-medium">All Reports</button>
+                                    <button class="px-4 py-2 text-gray-600 rounded-lg font-medium hover:bg-gray-100">Lab Tests</button>
+                                    <button class="px-4 py-2 text-gray-600 rounded-lg font-medium hover:bg-gray-100">Imaging</button>
+                                    <button class="px-4 py-2 text-gray-600 rounded-lg font-medium hover:bg-gray-100">Doctor Notes</button>
+                                </div>
+                                
+                                <div class="relative">
+                                    <input type="text" placeholder="Search reports..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/1a5951cf-f95f-4cb9-9e3c-c4d7e9e68493.png" alt="Search icon" class="absolute left-3 top-2.5 h-5 w-5 text-gray-400"/>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <!-- Report Item 1 -->
+                                <div class="border border-gray-200 rounded-xl p-4 hover:border-blue-400 transition-colors">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <div>
+                                            <h3 class="text-lg font-semibold">Complete Blood Count (CBC)</h3>
+                                            <p class="text-sm text-gray-600">Dr. Sarah Johnson • June 10, 2023</p>
+                                        </div>
+                                        <div class="flex space-x-2">
+                                            <button class="p-2 bg-gray-100 rounded-lg hover:bg-gray-200">
+                                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/94de8c15-be39-475a-a905-a632a9dbcc7c.png" alt="View icon" class="h-5 w-5"/>
+                                            </button>
+                                            <button class="p-2 bg-gray-100 rounded-lg hover:bg-gray-200">
+                                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/ab8e9e1e-54c3-4d54-b15e-cac4f5e5072a.png" alt="Download icon" class="h-5 w-5"/>
+                                            </button>
+                                            <button class="p-2 bg-gray-100 rounded-lg hover:bg-gray-200">
+                                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/a2823204-2ce0-4f37-bff9-2935ca9d9861.png" alt="Delete icon" class="h-5 w-5"/>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="flex mb-3">
+                                        <div class="border-r border-gray-200 pr-4 mr-4">
+                                            <p class="text-xs text-gray-500">Status</p>
+                                            <p class="font-medium"><span class="inline-block h-2 w-2 rounded-full bg-green-500 mr-1"></span> Normal</p>
+                                        </div>
+                                        <div class="border-r border-gray-200 pr-4 mr-4">
+                                            <p class="text-xs text-gray-500">Hemoglobin</p>
+                                            <p class="font-medium">14.2 g/dL</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs text-gray-500">WBC Count</p>
+                                            <p class="font-medium">7.3 x10^3/μL</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex space-x-3">
+                                        <button class="text-blue-600 hover:text-blue-800 font-medium text-sm">View Full Report</button>
+                                        <button class="text-blue-600 hover:text-blue-800 font-medium text-sm">AI Analysis</button>
+                                        <button class="text-blue-600 hover:text-blue-800 font-medium text-sm">Trends</button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Report Item 2 -->
+                                <div class="border border-gray-200 rounded-xl p-4 hover:border-blue-400 transition-colors">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <div>
+                                            <h3 class="text-lg font-semibold">Lipid Panel</h3>
+                                            <p class="text-sm text-gray-600">Central Diagnostics • May 28, 2023</p>
+                                        </div>
+                                        <div class="flex space-x-2">
+                                            <button class="p-2 bg-gray-100 rounded-lg hover:bg-gray-200">
+                                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/d721f478-6e89-4d29-be12-e6cbadfc0e7a.png" alt="View icon" class="h-5 w-5"/>
+                                            </button>
+                                            <button class="p-2 bg-gray-100 rounded-lg hover:bg-gray-200">
+                                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/efaba8da-52d7-41a2-9eed-c76144ea9045.png" alt="Download icon" class="h-5 w-5"/>
+                                            </button>
+                                            <button class="p-2 bg-gray-100 rounded-lg hover:bg-gray-200">
+                                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/217c5279-fcb0-457a-8e17-c18fb3157ae7.png" alt="Delete icon" class="h-5 w-5"/>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="flex mb-3">
+                                        <div class="border-r border-gray-200 pr-4 mr-4">
+                                            <p class="text-xs text-gray-500">Status</p>
+                                            <p class="font-medium"><span class="inline-block h-2 w-2 rounded-full bg-yellow-500 mr-1"></span> Elevated</p>
+                                        </div>
+                                        <div class="border-r border-gray-200 pr-4 mr-4">
+                                            <p class="text-xs text-gray-500">Total Cholesterol</p>
+                                            <p class="font-medium">218 mg/dL</p>
+                                        </div>
+                                        <div class="border-r border-gray-200 pr-4 mr-4">
+                                            <p class="text-xs text-gray-500">LDL</p>
+                                            <p class="font-medium">145 mg/dL</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs text-gray-500">Triglycerides</p>
+                                            <p class="font-medium">180 mg/dL</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex space-x-3">
+                                        <button class="text-blue-600 hover:text-blue-800 font-medium text-sm">View Full Report</button>
+                                        <button class="text-blue-600 hover:text-blue-800 font-medium text-sm">AI Analysis</button>
+                                        <button class="text-blue-600 hover:text-blue-800 font-medium text-sm">Trends</button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Report Item 3 -->
+                                <div class="border border-gray-200 rounded-xl p-4 hover:border-blue-400 transition-colors">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <div>
+                                            <h3 class="text-lg font-semibold">Chest X-Ray</h3>
+                                            <p class="text-sm text-gray-600">City Imaging Center • April 15, 2023</p>
+                                        </div>
+                                        <div class="flex space-x-2">
+                                            <button class="p-2 bg-gray-100 rounded-lg hover:bg-gray-200">
+                                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/cc9e2101-fdca-4527-bf84-58cac4a8b049.png" alt="View icon" class="h-5 w-5"/>
+                                            </button>
+                                            <button class="p-2 bg-gray-100 rounded-lg hover:bg-gray-200">
+                                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/7019eb55-cf82-4c9d-8054-f7380ec3497d.png" alt="Download icon" class="h-5 w-5"/>
+                                            </button>
+                                            <button class="p-2 bg-gray-100 rounded-lg hover:bg-gray-200">
+                                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/b830394a-d8e8-4f01-b91a-43cd5c2d2028.png" alt="Delete icon" class="h-5 w-5"/>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="flex mb-3">
+                                        <div class="border-r border-gray-200 pr-4 mr-4">
+                                            <p class="text-xs text-gray-500">Status</p>
+                                            <p class="font-medium"><span class="inline-block h-2 w-2 rounded-full bg-green-500 mr-1"></span> Normal</p>
+                                        </div>
+                                        <div class="border-r border-gray-200 pr-4 mr-4">
+                                            <p class="text-xs text-gray-500">Findings</p>
+                                            <p class="font-medium">No acute findings</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs text-gray-500">Impression</p>
+                                            <p class="font-medium">Clear lungs, no infiltrates</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex space-x-3">
+                                        <button class="text-blue-600 hover:text-blue-800 font-medium text-sm">View Full Report</button>
+                                        <button class="text-blue-600 hover:text-blue-800 font-medium text-sm">AI Analysis</button>
+                                        <button class="text-blue-600 hover:text-blue-800 font-medium text-sm">View Images</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Report Analysis Section -->
+                        <div class="bg-white rounded-xl shadow-sm p-6">
+                            <h2 class="text-xl font-semibold mb-6">Report Analysis</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                <!-- Blood Test Trends -->
+                                <div class="bg-blue-50 rounded-xl p-4">
+                                    <div class="flex items-center mb-4">
+                                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/9458cfcd-f1cf-473c-8f1f-ca9d7e0c3e45.png" alt="Blood test icon" class="h-10 w-10 mr-4"/>
+                                        <h3 class="text-lg font-semibold">Blood Test Trends</h3>
+                                    </div>
+                                    
+                                    <div class="bg-white p-4 rounded-lg mb-4">
+                                        <div class="flex justify-between items-center mb-2">
+                                            <p class="font-medium">Hemoglobin (g/dL)</p>
+                                            <div class="flex items-center">
+                                                <span class="text-green-600 text-sm font-medium">Within Range</span>
+                                            </div>
+                                        </div>
+                                        <canvas id="hemoglobinChart" height="150"></canvas>
+                                    </div>
+                                    
+                                    <div class="bg-white p-4 rounded-lg">
+                                        <div class="flex justify-between items-center mb-2">
+                                            <p class="font-medium">LDL Cholesterol (mg/dL)</p>
+                                            <div class="flex items-center">
+                                                <span class="text-red-600 text-sm font-medium">High</span>
+                                            </div>
+                                        </div>
+                                        <canvas id="ldlChart" height="150"></canvas>
+                                    </div>
+                                </div>
+                                
+                                <!-- AI Insights -->
+                                <div class="bg-purple-50 rounded-xl p-4">
+                                    <div class="flex items-center mb-4">
+                                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/2ee3afe6-9ece-4bf4-8473-dc96b0eec75b.png" alt="AI brain icon" class="h-10 w-10 mr-4"/>
+                                        <h3 class="text-lg font-semibold">AI-Powered Insights</h3>
+                                    </div>
+                                    
+                                    <div class="bg-white p-4 rounded-lg mb-4">
+                                        <div class="flex items-start mb-3">
+                                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/75f34131-0841-44dc-97e2-dc6061f79246.png" alt="Information icon" class="mt-1 mr-2 h-5 w-5 flex-shrink-0"/>
+                                            <div>
+                                                <h4 class="font-medium mb-1">Hemoglobin Stability</h4>
+                                                <p class="text-sm text-gray-600">Your hemoglobin levels have remained stable over the past year, indicating good iron status.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="bg-white p-4 rounded-lg mb-4">
+                                        <div class="flex items-start mb-3">
+                                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/5dac06f7-5a38-485e-bc2e-8a1ad9a7f9a8.png" alt="Alert icon" class="mt-1 mr-2 h-5 w-5 flex-shrink-0"/>
+                                            <div>
+                                                <h4 class="font-medium mb-1">Elevated LDL Cholesterol</h4>
+                                                <p class="text-sm text-gray-600">Your LDL cholesterol has been increasing over the past 6 months. Dietary changes and exercise recommended.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="bg-white p-4 rounded-lg">
+                                        <div class="flex items-start mb-3">
+                                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/840ebc89-154b-4234-b434-1a58a460e5b5.png" alt="Recommendation icon" class="mt-1 mr-2 h-5 w-5 flex-shrink-0"/>
+                                            <div>
+                                                <h4 class="font-medium mb-1">Next Steps</h4>
+                                                <p class="text-sm text-gray-600">Recommend repeating lipid panel in 3 months with fasting blood sugar test.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white rounded-xl shadow-sm p-6">
+                                <h3 class="text-lg font-semibold mb-4">Report Actions</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <button class="flex items-center justify-center bg-green-50 text-green-600 p-4 rounded-lg hover:bg-green-100">
+                                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/94f77a5f-ecb0-40c7-bf5b-3d5f5b40ee88.png" alt="Share icon" class="mr-2 h-5 w-5"/>
+                                        Share with Doctor
+                                    </button>
+                                    <button class="flex items-center justify-center bg-blue-50 text-blue-600 p-4 rounded-lg hover:bg-blue-100">
+                                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/a4ebc9b1-f6f2-4aaa-a4f4-4ea8cbd1762c.png" alt="Download icon" class="mr-2 h-5 w-5"/>
+                                        Download Pack
+                                    </button>
+                                    <button class="flex items-center justify-center bg-purple-50 text-purple-600 p-4 rounded-lg hover:bg-purple-100">
+                                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/d8d23455-314b-4bce-a1df-a8cfc51ba6cd.png" alt="Medical icon" class="mr-2 h-5 w-5"/>
+                                        Request Consultation
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Diet Plans Page -->
+    <div class="page" id="dietPlansPage">
+        <div class="min-h-screen bg-gray-50">
+            <!-- Header -->
+            <header class="bg-white shadow-sm">
+                <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+                    <div class="flex items-center">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/81f0fab5-8601-46d3-b18f-9e8501d29011.png" alt="Small HealthPro logo" class="h-8 w-8 mr-2" />
+                        <span class="text-xl font-bold text-gray-800">HealthPro</span>
+                    </div>
+                    <nav class="hidden md:flex space-x-8">
+                        <a href="#" class="text-gray-600 hover:text-blue-600 font-medium" onclick="navigateTo('dashboardPage')">Dashboard</a>
+                        <a href="#" class="text-gray-600 hover:text-blue-600 font-medium" onclick="navigateTo('diseasePredictorPage')">AI Predictor</a>
+                        <a href="#" class="text-gray-600 hover:text-blue-600 font-medium" onclick="navigateTo('riskAnalysisPage')">Risk Analysis</a>
+                        <a href="#" class="text-gray-600 hover:text-blue-600 font-medium" onclick="navigateTo('eReportsPage')">E-Reports</a>
+                        <a href="#" class="text-blue-600 font-medium" onclick="navigateTo('dietPlansPage')">Diet Plans</a>
+                    </nav>
+                    <div class="flex items-center space-x-4">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/8df8f938-e326-4f61-9c85-12e4c5d21b06.png" alt="User profile icon" class="h-8 w-8 rounded-full" />
+                        <button onclick="navigateTo('loginPage')" class="text-gray-600 hover:text-blue-600">Logout</button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Content -->
+            <main class="container mx-auto px-4 py-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Personalized Settings -->
+                    <div class="col-span-1">
+                        <div class="bg-white rounded-xl shadow-sm p-6">
+                            <h2 class="text-xl font-semibold mb-4">Your Diet Profile</h2>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 mb-2">Goal</label>
+                                <select class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                    <option>Weight Loss</option>
+                                    <option>Weight Maintenance</option>
+                                    <option>Muscle Gain</option>
+                                    <option>Heart Health</option>
+                                    <option>Diabetes Management</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="block text-gray-700 mb-2">Calorie Target</label>
+                                <input type="number" value="1850" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="block text-gray-700 mb-2">Dietary Preferences</label>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <label class="flex items-center"><input type="checkbox" class="mr-2" checked> Vegetarian</label>
+                                    <label class="flex items-center"><input type="checkbox" class="mr-2"> Vegan</label>
+                                    <label class="flex items-center"><input type="checkbox" class="mr-2"> Gluten-Free</label>
+                                    <label class="flex items-center"><input type="checkbox" class="mr-2"> Dairy-Free</label>
+                                    <label class="flex items-center"><input type="checkbox" class="mr-2"> Low Sodium</label>
+                                    <label class="flex items-center"><input type="checkbox" class="mr-2"> Low Carb</label>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="block text-gray-700 mb-2">Medical Considerations</label>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <label class="flex items-center"><input type="checkbox" class="mr-2"> Diabetes</label>
+                                    <label class="flex items-center"><input type="checkbox" class="mr-2"> High Blood Pressure</label>
+                                    <label class="flex items-center"><input type="checkbox" class="mr-2"> High Cholesterol</label>
+                                    <label class="flex items-center"><input type="checkbox" class="mr-2"> Food Allergies</label>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="block text-gray-700 mb-2">Food Dislikes</label>
+                                <textarea class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" rows="2" placeholder="List foods you don't like or can't eat..."></textarea>
+                            </div>
+                            
+                            <button class="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors">Update Profile</button>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl shadow-sm p-6 mt-6">
+                            <h2 class="text-xl font-semibold mb-4">Daily Nutrition</h2>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-sm font-medium">Calories</span>
+                                <span class="text-sm font-medium">1350/1850 kcal</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5 mb-6">
+                                <div class="bg-blue-600 h-2.5 rounded-full" style="width: 73%"></div>
+                            </div>
+                            
+                            <div class="grid grid-cols-3 gap-4">
+                                <div class="text-center">
+                                    <p class="text-lg font-bold text-green-600">58g</p>
+                                    <p class="text-xs text-gray-500">Protein</p>
+                                </div>
+                                <div class="text-center">
+                                    <p class="text-lg font-bold text-yellow-600">42g</p>
+                                    <p class="text-xs text-gray-500">Fat</p>
+                                </div>
+                                <div class="text-center">
+                                    <p class="text-lg font-bold text-purple-600">175g</p>
+                                    <p class="text-xs text-gray-500">Carbs</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Diet Plan Content -->
+                    <div class="col-span-2">
+                        <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+                            <div class="flex items-center justify-between mb-6">
+                                <h2 class="text-2xl font-bold text-gray-800">Your Personalized Meal Plan</h2>
+                                <div class="flex space-x-3">
+                                    <select class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                        <option>This Week</option>
+                                        <option>Next Week</option>
+                                    </select>
+                                    <button class="flex items-center text-blue-600 hover:text-blue-800">
+                                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/80b514f8-e0ba-492f-9c36-8a9824e91d34.png" alt="Download icon" class="mr-1 h-5 w-5"/>
+                                        Download Plan
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Meal Plan Days Navigation -->
+                            <div class="flex mb-6 overflow-x-auto pb-2">
+                                <button class="px-4 py-2 bg-blue-600 text-white rounded-lg font-medium mr-2">Monday</button>
+                                <button class="px-4 py-2 text-gray-600 rounded-lg font-medium hover:bg-gray-100 mr-2">Tuesday</button>
+                                <button class="px-4 py-2 text-gray-600 rounded-lg font-medium hover:bg-gray-100 mr-2">Wednesday</button>
+                                <button class="px-4 py-2 text-gray-600 rounded-lg font-medium hover:bg-gray-100 mr-2">Thursday</button>
+                                <button class="px-4 py-2 text-gray-600 rounded-lg font-medium hover:bg-gray-100 mr-2">Friday</button>
+                                <button class="px-4 py-2 text-gray-600 rounded-lg font-medium hover:bg-gray-100 mr-2">Saturday</button>
+                                <button class="px-4 py-2 text-gray-600 rounded-lg font-medium hover:bg-gray-100">Sunday</button>
+                            </div>
+                            
+                            <!-- Monday's Meal Plan -->
+                            <div class="space-y-6">
+                                <!-- Breakfast -->
+                                <div>
+                                    <h3 class="text-lg font-semibold mb-3 flex items-center">
+                                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/2ded598d-8cdc-4589-9c43-269383f7dd88.png" alt="Sunrise icon" class="mr-2 h-5 w-5"/>
+                                        Breakfast (320 kcal)
+                                    </h3>
+                                    <div class="border border-gray-200 rounded-xl p-4">
+                                        <div class="flex items-start">
+                                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/d7524eca-51e6-4d13-8c68-36858a83a827.png" alt="Vegetable omelette with whole grain toast on white plate" class="h-16 w-16 object-cover rounded-lg mr-4"/>
+                                            <div class="flex-1">
+                                                <h4 class="font-medium">Vegetable Omelette with Whole Grain Toast</h4>
+                                                <p class="text-sm text-gray-600 mb-2">Eggs, spinach, bell peppers, whole wheat bread</p>
+                                                <div class="flex flex-wrap gap-2">
+                                                    <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">High Protein</span>
+                                                    <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Low Carb</span>
+                                                </div>
+                                            </div>
+                                            <button class="text-blue-600 hover:text-blue-800 font-medium text-sm">Recipe</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Lunch -->
+                                <div>
+                                    <h3 class="text-lg font-semibold mb-3 flex items-center">
+                                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/bb190d09-b4e0-49fa-a8c4-bc8eae57c94f.png" alt="Sun icon" class="mr-2 h-5 w-5"/>
+                                        Lunch (450 kcal)
+                                    </h3>
+                                    <div class="border border-gray-200 rounded-xl p-4">
+                                        <div class="flex items-start">
+                                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/f39ab210-703f-4c70-8156-8ce40b839447.png" alt="Quinoa salad with chickpeas and vegetables in a bowl" class="h-16 w-16 object-cover rounded-lg mr-4"/>
+                                            <div class="flex-1">
+                                                <h4 class="font-medium">Quinoa Salad with Chickpeas</h4>
+                                                <p class="text-sm text-gray-600 mb-2">Quinoa, chickpeas, cucumber, cherry tomatoes, lemon dressing</p>
+                                                <div class="flex flex-wrap gap-2">
+                                                    <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">High Fiber</span>
+                                                    <span class="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-full">Vegetarian</span>
+                                                </div>
+                                            </div>
+                                            <button class="text-blue-600 hover:text-blue-800 font-medium text-sm">Recipe</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Snack -->
+                                <div>
+                                    <h3 class="text-lg font-semibold mb-3 flex items-center">
+                                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/50d1f58a-2d60-4bad-a705-1308163106fd.png" alt="Apple icon" class="mr-2 h-5 w-5"/>
+                                        Afternoon Snack (150 kcal)
+                                    </h3>
+                                    <div class="border border-gray-200 rounded-xl p-4">
+                                        <div class="flex items-start">
+                                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/a085eb60-47b5-4bf7-a05a-ba2e646a63aa.png" alt="Fresh apple with almond butter in a small bowl" class="h-16 w-16 object-cover rounded-lg mr-4"/>
+                                            <div class="flex-1">
+                                                <h4 class="font-medium">Apple with Almond Butter</h4>
+                                                <p class="text-sm text-gray-600 mb-2">Medium apple, 1 tbsp almond butter</p>
+                                                <div class="flex flex-wrap gap-2">
+                                                    <span class="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded-full">Healthy Fats</span>
+                                                </div>
+                                            </div>
+                                            <button class="text-blue-600 hover:text-blue-800 font-medium text-sm">Recipe</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Dinner -->
+                                <div>
+                                    <h3 class="text-lg font-semibold mb-3 flex items-center">
+                                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/708ac199-40e5-49ef-813a-ca721be71b3e.png" alt="Moon icon" class="mr-2 h-5 w-5"/>
+                                        Dinner (430 kcal)
+                                    </h3>
+                                    <div class="border border-gray-200 rounded-xl p-4">
+                                        <div class="flex items-start">
+                                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/8175f1d3-851f-4f59-8d53-660a192c90c5.png" alt="Grilled salmon with steamed broccoli and sweet potato mash" class="h-16 w-16 object-cover rounded-lg mr-4"/>
+                                            <div class="flex-1">
+                                                <h4 class="font-medium">Grilled Salmon with Vegetables</h4>
+                                                <p class="text-sm text-gray-600 mb-2">Salmon fillet, steamed broccoli, mashed sweet potato</p>
+                                                <div class="flex flex-wrap gap-2">
+                                                    <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Omega-3</span>
+                                                    <span class="px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full">Low Sodium</span>
+                                                </div>
+                                            </div>
+                                            <button class="text-blue-600 hover:text-blue-800 font-medium text-sm">Recipe</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Grocery List -->
+                        <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+                            <div class="flex items-center justify-between mb-6">
+                                <h2 class="text-2xl font-bold text-gray-800">Grocery List</h2>
+                                <div class="flex space-x-3">
+                                    <button class="flex items-center text-blue-600 hover:text-blue-800">
+                                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/8b892330-5ac8-41ef-9a7a-fed96d6cb096.png" alt="Email icon" class="mr-1 h-5 w-5"/>
+                                        Email List
+                                    </button>
+                                    <button class="flex items-center text-blue-600 hover:text-blue-800">
+                                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/844d9d27-e29c-490f-a840-399b9b886a8b.png" alt="Print icon" class="mr-1 h-5 w-5"/>
+                                        Print
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <!-- Vegetables -->
+                                <div>
+                                    <h3 class="font-medium mb-3 flex items-center">
+                                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/0d96f6d5-e3db-437e-a56e-f5322059b4b9.png" alt="Carrot icon" class="mr-2 h-5 w-5"/>
+                                        Vegetables
+                                    </h3>
+                                    <div class="space-y-2">
+                                        <label class="flex items-center">
+                                            <input type="checkbox" class="mr-2 rounded text-blue-600">
+                                            <span>Spinach - 1 bunch</span>
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" class="mr-2 rounded text-blue-600">
+                                            <span>Bell peppers - 2</span>
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" class="mr-2 rounded text-blue-600">
+                                            <span>Cucumber - 1</span>
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" class="mr-2 rounded text-blue-600">
+                                            <span>Cherry tomatoes - 1 pint</span>
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" class="mr-2 rounded text-blue-600">
+                                            <span>Broccoli - 1 head</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <!-- Proteins -->
+                                <div>
+                                    <h3 class="font-medium mb-3 flex items-center">
+                                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/6ffa49c3-d4fe-4d48-b7a4-508d393c05cb.png" alt="Egg icon" class="mr-2 h-5 w-5"/>
+                                        Proteins
+                                    </h3>
+                                    <div class="space-y-2">
+                                        <label class="flex items-center">
+                                            <input type="checkbox" class="mr-2 rounded text-blue-600">
+                                            <span>Eggs - 6</span>
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" class="mr-2 rounded text-blue-600">
+                                            <span>Chickpeas - 1 can</span>
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" class="mr-2 rounded text-blue-600">
+                                            <span>Salmon fillet - 2 pieces</span>
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" class="mr-2 rounded text-blue-600">
+                                            <span>Almond butter - 1 jar</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <!-- Grains & Other -->
+                                <div>
+                                    <h3 class="font-medium mb-3 flex items-center">
+                                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/98e87398-2c29-4a99-ab31-bf8e7c91be00.png" alt="Wheat icon" class="mr-2 h-5 w-5"/>
+                                        Grains & Other
+                                    </h3>
+                                    <div class="space-y-2">
+                                        <label class="flex items-center">
+                                            <input type="checkbox" class="mr-2 rounded text-blue-600">
+                                            <span>Whole wheat bread - 1 loaf</span>
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" class="mr-2 rounded text-blue-600">
+                                            <span>Quinoa - 1 bag</span>
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" class="mr-2 rounded text-blue-600">
+                                            <span>Sweet potatoes - 2</span>
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" class="mr-2 rounded text-blue-600">
+                                            <span>Apples - 4</span>
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" class="mr-2 rounded text-blue-600">
+                                            <span>Olive oil - 1 bottle</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Nutrition Education -->
+                        <div class="bg-white rounded-xl shadow-sm p-6">
+                            <h2 class="text-xl font-semibold mb-4">Nutrition Education</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="border border-gray-200 rounded-xl p-4 flex items-start">
+                                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/27b95210-c70a-4eb3-bc5f-32086441326e.png" alt="Nutrition facts icon with various food groups" class="mr-4"/>
+                                    <div>
+                                        <h3 class="font-medium mb-2">Understanding Macronutrients</h3>
+                                        <p class="text-sm text-gray-600">Learn how to balance proteins, carbs, and fats for optimal health.</p>
+                                        <button class="text-blue-600 hover:text-blue-800 text-sm font-medium mt-2">Read Article</button>
+                                    </div>
+                                </div>
+                                <div class="border border-gray-200 rounded-xl p-4 flex items-start">
+                                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/b88919b6-7890-4fdd-a77c-bac4d3efc2b1.png" alt="Meal planning calendar with healthy foods" class="mr-4"/>
+                                    <div>
+                                        <h3 class="font-medium mb-2">Meal Prep Strategies</h3>
+                                        <p class="text-sm text-gray-600">Save time and eat healthy with these meal prep techniques.</p>
+                                        <button class="text-blue-600 hover:text-blue-800 text-sm font-medium mt-2">Watch Video</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- E-Consultation Page -->
+    <div class="page" id="consultationPage">
+        <div class="min-h-screen bg-gray-50">
+            <!-- Header -->
+            <header class="bg-white shadow-sm">
+                <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+                    <div class="flex items-center">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/0279393f-164a-43e2-a98f-36ccc9e8083f.png" alt="Small HealthPro logo" class="h-8 w-8 mr-2" />
+                        <span class="text-xl font-bold text-gray-800">HealthPro</span>
+                    </div>
+                    <nav class="hidden md:flex space-x-8">
+                        <a href="#" class="text-gray-600 hover:text-blue-600 font-medium" onclick="navigateTo('dashboardPage')">Dashboard</a>
+                        <a href="#" class="text-gray-600 hover:text-blue-600 font-medium" onclick="navigateTo('diseasePredictorPage')">AI Predictor</a>
+                        <a href="#" class="text-gray-600 hover:text-blue-600 font-medium" onclick="navigateTo('riskAnalysisPage')">Risk Analysis</a>
+                        <a href="#" class="text-gray-600 hover:text-blue-600 font-medium" onclick="navigateTo('eReportsPage')">E-Reports</a>
+                        <a href="#" class="text-gray-600 hover:text-blue-600 font-medium" onclick="navigateTo('dietPlansPage')">Diet Plans</a>
+                    </nav>
+                    <div class="flex items-center space-x-4">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/6c7499a8-5307-447f-a8f1-38d5e8e2a7fd.png" alt="User profile icon" class="h-8 w-8 rounded-full" />
+                        <button onclick="navigateTo('loginPage')" class="text-gray-600 hover:text-blue-600">Logout</button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Content -->
+            <main class="container mx-auto px-4 py-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Consultation Options -->
+                    <div class="col-span-1">
+                        <div class="bg-white rounded-xl shadow-sm p-6">
+                            <h2 class="text-xl font-semibold mb-4">Consultation Options</h2>
+                            <div class="space-y-4">
+                                <button onclick="navigateTo('videoConsultation')" class="w-full text-left px-4 py-3 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors flex items-center">
+                                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/39ef9caa-3455-4c7f-8b37-fd1dad779c06.png" alt="Video call icon" class="mr-3"/>
+                                    Video Consultation
+                                </button>
+                                <button class="w-full text-left px-4 py-3 bg-green-50 text-green-600 rounded-lg hover:bg-green-100 transition-colors flex items-center">
+                                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/d1c48fa6-9f8c-45b0-8515-f10d9fdf860b.png" alt="Chat icon" class="mr-3"/>
+                                    Chat with Doctor
+                                </button>
+                                <button class="w-full text-left px-4 py-3 bg-purple-50 text-purple-600 rounded-lg hover:bg-purple-100 transition-colors flex items-center">
+                                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/10c3e12d-e588-4976-8610-1ac227e047ff.png" alt="Phone icon" class="mr-3"/>
+                                    Phone Consultation
+                                </button>
+                                <button class="w-full text-left px-4 py-3 bg-yellow-50 text-yellow-600 rounded-lg hover:bg-yellow-100 transition-colors flex items-center">
+                                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/e179a161-3586-4f71-ba71-e2c4f8498dd3.png" alt="In-person icon" class="mr-3"/>
+                                    Find In-Person Visit
+                                </button>
+                            </div>
+                            
+                            <div class="mt-6">
+                                <h3 class="font-medium mb-2">Specialties Available</h3>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <span class="bg-gray-100 text-gray-800 text-sm px-3 py-1 rounded-full">General</span>
+                                    <span class="bg-gray-100 text-gray-800 text-sm px-3 py-1 rounded-full">Cardiology</span>
+                                    <span class="bg-gray-100 text-gray-800 text-sm px-3 py-1 rounded-full">Dermatology</span>
+                                    <span class="bg-gray-100 text-gray-800 text-sm px-3 py-1 rounded-full">Pediatrics</span>
+                                    <span class="bg-gray-100 text-gray-800 text-sm px-3 py-1 rounded-full">Mental Health</span>
+                                    <span class="bg-gray-100 text-gray-800 text-sm px-3 py-1 rounded-full">Nutrition</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl shadow-sm p-6 mt-6">
+                            <h2 class="text-xl font-semibold mb-4">Upcoming Consultations</h2>
+                            <div class="space-y-4">
+                                <div class="border border-gray-200 rounded-lg p-4">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <h3 class="font-medium">Dr. Emily Parker</h3>
+                                        <span class="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded-full">Video</span>
+                                    </div>
+                                    <p class="text-sm text-gray-600 mb-2">General Consultation</p>
+                                    <p class="text-sm font-medium">Tomorrow, 10:30 AM</p>
+                                </div>
+                                <div class="border border-gray-200 rounded-lg p-4">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <h3 class="font-medium">Dr. Michael Chen</h3>
+                                        <span class="text-sm bg-green-100 text-green-800 px-2 py-1 rounded-full">In-Person</span>
+                                    </div>
+                                    <p class="text-sm text-gray-600 mb-2">Cardiology Follow-up</p>
+                                    <p class="text-sm font-medium">June 22, 2:00 PM</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Doctor Selection -->
+                    <div class="col-span-2">
+                        <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+                            <div class="flex items-center justify-between mb-6">
+                                <h2 class="text-2xl font-bold text-gray-800">Available Doctors Now</h2>
+                                <div class="relative w scouts-64">
+                                    <input type="text" placeholder="Search doctors..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/dcc8a4a9-b9f3-4071-ab84-58d39e59b925.png" alt="Search icon" class="absolute left-3 top-2.5 h-5 w-5 text-gray-400"/>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <!-- Doctor 1 -->
+                                <div class="border border-gray-200 rounded-xl p-4 hover:shadow-md transition-shadow">
+                                    <div class="flex items-start mb-4">
+                                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/8a16143a-875f-492f-ba09-cf07f5e1bd0f.png" alt="Dr. Sarah Johnson portrait, female doctor with white coat smiling professionally" class="h-16 w-16 rounded-full object-cover mr-4"/>
+                                        <div>
+                                            <h3 class="font-bold">Dr. Sarah Johnson</h3>
+                                            <p class="text-sm text-gray-600">General Practitioner</p>
+                                            <div class="flex items-center mt-1">
+                                                <span class="text-yellow-400">★★★★★</span>
+                                                <span class="text-gray-500 text-sm ml-1">(248)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex justify-between items-center mb-3">
+                                        <div class="text-sm">
+                                            <p class="text-gray-700"><span class="font-medium">Experience:</span> 12 years</p>
+                                            <p class="text-gray-700"><span class="font-medium">Languages:</span> English, Spanish</p>
+                                        </div>
+                                        <div class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">
+                                            Available Now
+                                        </div>
+                                    </div>
+                                    <button class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">Book Now ($49)</button>
+                                </div>
+                                
+                                <!-- Doctor 2 -->
+                                <div class="border border-gray-200 rounded-xl p-4 hover:shadow-md transition-shadow">
+                                    <div class="flex items-start mb-4">
+                                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/ef208888-ee10-4d52-b36c-30d61f4a0807.png" alt="Dr. Raj Patel portrait, male doctor with stethoscope and warm smile" class="h-16 w-16 rounded-full object-cover mr-4"/>
+                                        <div>
+                                            <h3 class="font-bold">Dr. Raj Patel</h3>
+                                            <p class="text-sm text-gray-600">Cardiologist</p>
+                                            <div class="flex items-center mt-1">
+                                                <span class="text-yellow-400">★★★★☆</span>
+                                                <span class="text-gray-500 text-sm ml-1">(187)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex justify-between items-center mb-3">
+                                        <div class="text-sm">
+                                            <p class="text-gray-700"><span class="font-medium">Experience:</span> 15 years</p>
+                                            <p class="text-gray-700"><span class="font-medium">Languages:</span> English, Hindi</p>
+                                        </div>
+                                        <div class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">
+                                            Available in 30 min
+                                        </div>
+                                    </div>
+                                    <button class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">Book Now ($89)</button>
+                                </div>
+                                
+                                <!-- Doctor 3 -->
+                                <div class="border border-gray-200 rounded-xl p-4 hover:shadow-md transition-shadow">
+                                    <div class="flex items-start mb-4">
+                                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/5d91f3ab-fbc0-47f4-96b9-9ada66b29346.png" alt="Dr. Lisa Wong portrait, female doctor with glasses looking professional" class="h-16 w-16 rounded-full object-cover mr-4"/>
+                                        <div>
+                                            <h3 class="font-bold">Dr. Lisa Wong</h3>
+                                            <p class="text-sm text-gray-600">Pediatrician</p>
+                                            <div class="flex items-center mt-1">
+                                                <span class="text-yellow-400">★★★★★</span>
+                                                <span class="text-gray-500 text-sm ml-1">(312)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex justify-between items-center mb-3">
+                                        <div class="text-sm">
+                                            <p class="text-gray-700"><span class="font-medium">Experience:</span> 8 years</p>
+                                            <p class="text-gray-700"><span class="font-medium">Languages:</span> English, Mandarin</p>
+                                        </div>
+                                        <div class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">
+                                            Available Now
+                                        </div>
+                                    </div>
+                                    <button class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">Book Now ($59)</button>
+                                </div>
+                                
+                                <!-- Doctor 4 -->
+                                <div class="border border-gray-200 rounded-xl p-4 hover:shadow-md transition-shadow">
+                                    <div class="flex items-start mb-4">
+                                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/0c236798-6e54-4a34-9246-3aa0e7f1b04d.png" alt="Dr. David Miller portrait, senior doctor with grey hair and kind expression" class="h-16 w-16 rounded-full object-cover mr-4"/>
+                                        <div>
+                                            <h3 class="font-bold">Dr. David Miller</h3>
+                                            <p class="text-sm text-gray-600">Dermatologist</p>
+                                            <div class="flex items-center mt-1">
+                                                <span class="text-yellow-400">★★★★★</span>
+                                                <span class="text-gray-500 text-sm ml-1">(426)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex justify-between items-center mb-3">
+                                        <div class="text-sm">
+                                            <p class="text-gray-700"><span class="font-medium">Experience:</span> 18 years</p>
+                                            <p class="text-gray-700"><span class="font-medium">Languages:</span> English</p>
+                                        </div>
+                                        <div class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">
+                                            Available Now
+                                        </div>
+                                    </div>
+                                    <button class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">Book Now ($79)</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl shadow-sm p-6">
+                            <h2 class="text-xl font-semibold mb-4">Past Consultations</h2>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Doctor</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Specialty</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Notes</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200">
+                                        <tr>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">June 10, 2023</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <div class="flex items-center">
+                                                    <div class="flex-shrink-0 h-10 w-10">
+                                                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/98bb9500-c134-4fc9-8e89-3420e29cfa05.png" alt="Dr. Sarah Johnson small portrait" class="h-10 w-10 rounded-full"/>
+                                                    </div>
+                                                    <div class="ml-4">
+                                                        <div class="text-sm font-medium text-gray-900">Dr. Sarah Johnson</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">General</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Video</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <button class="text-blue-600 hover:text-blue-900">View</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">May 28, 2023</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <div class="flex items-center">
+                                                    <div class="flex-shrink-0 h-10 w-10">
+                                                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/079baeda-1bd8-4f56-8c82-26dc0f651248.png" alt="Dr. Raj Patel small portrait" class="h-10 w-10 rounded-full"/>
+                                                    </div>
+                                                    <div class="ml-4">
+                                                        <div class="text-sm font-medium text-gray-900">Dr. Raj Patel</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Cardiology</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">In-Person</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <button class="text-blue-600 hover:text-blue-900">View</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">April 15, 2023</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <div class="flex items-center">
+                                                    <div class="flex-shrink-0 h-10 w-10">
+                                                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/f20e8c41-1682-4a12-b5cd-77a21271bc3e.png" alt="Dr. Lisa Wong small portrait" class="h-10 w-10 rounded-full"/>
+                                                    </div>
+                                                    <div class="ml-4">
+                                                        <div class="text-sm font-medium text-gray-900">Dr. Lisa Wong</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Pediatrics</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Video</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <button class="text-blue-600 hover:text-blue-900">View</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Locations Page -->
+    <div class="page" id="locationsPage">
+        <div class="min-h-screen bg-gray-50">
+            <!-- Header -->
+            <header class="bg-white shadow-sm">
+                <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+                    <div class="flex items-center">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/8487ad27-6cb4-4b7a-b0fc-819bd8087c5e.png" alt="Small HealthPro logo" class="h-8 w-8 mr-2" />
+                        <span class="text-xl font-bold text-gray-800">HealthPro</span>
+                    </div>
+                    <nav class="hidden md:flex space-x-8">
+                        <a href="#" class="text-gray-600 hover:text-blue-600 font-medium" onclick="navigateTo('dashboardPage')">Dashboard</a>
+                        <a href="#" class="text-gray-600 hover:text-blue-600 font-medium" onclick="navigateTo('diseasePredictorPage')">AI Predictor</a>
+                        <a href="#" class="text-gray-600 hover:text-blue-600 font-medium" onclick="navigateTo('riskAnalysisPage')">Risk Analysis</a>
+                        <a href="#" class="text-gray-600 hover:text-blue-600 font-medium" onclick="navigateTo('eReportsPage')">E-Reports</a>
+                        <a href="#" class="text-gray-600 hover:text-blue-600 font-medium" onclick="navigateTo('dietPlansPage')">Diet Plans</a>
+                    </nav>
+                    <div class="flex items-center space-x-4">
+                        <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/1bc8b0f4-b195-4b0a-be41-2148dd407ab3.png" alt="User profile icon" class="h-8 w-8 rounded-full" />
+                        <button onclick="navigateTo('loginPage')" class="text-gray-600 hover:text-blue-600">Logout</button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Content -->
+            <main class="container mx-auto px-4 py-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Search and Filters -->
+                    <div class="col-span-1">
+                        <div class="bg-white rounded-xl shadow-sm p-6">
+                            <h2 class="text-xl font-semibold mb-4">Find Nearby Facilities</h2>
+                            <div class="relative mb-4">
+                                <input type="text" placeholder="Search by name..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/10b12a38-3718-40df-94f6-11e41f370a4f.png" alt="Search icon" class="absolute left-3 top-2.5 h-5 w-5 text-gray-400"/>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="block text-gray-700 mb-2">Facility Type</label>
+                                <select class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                    <option>All Types</option>
+                                    <option>Hospital</option>
+                                    <option>Clinic</option>
+                                    <option>Pharmacy</option>
+                                    <option>Laboratory</option>
+                                    <option>Urgent Care</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="block text-gray-700 mb-2">Specialties</label>
+                                <select class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                    <option>All Specialties</option>
+                                    <option>General</option>
+                                    <option>Cardiology</option>
+                                    <option>Pediatrics</option>
+                                    <option>Dermatology</option>
+                                    <option>Orthopedics</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="block text-gray-700 mb-2">Distance</label>
+                                <select class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                    <option>Within 1 mile</option>
+                                    <option>Within 5 miles</option>
+                                    <option>Within 10 miles</option>
+                                    <option>Within 25 miles</option>
+                                    <option>Any distance</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-8">
+                                <label class="block text-gray-700 mb-2">Insurance Accepted</label>
+                                <select class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                    <option>Any Insurance</option>
+                                    <option>Aetna</option>
+                                    <option>Blue Cross</option>
+                                    <option>Cigna</option>
+                                    <option>Medicare</option>
+                                    <option>United Healthcare</option>
+                                </select>
+                            </div>
+                            
+                            <button class="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors">Search Facilities</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Map and Results -->
+                    <div class="col-span-2">
+                        <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+                            <div class="flex items-center justify-between mb-6">
+                                <h2 class="text-2xl font-bold text-gray-800">Healthcare Facilities Near You</h2>
+                                <button class="flex items-center text-blue-600 hover:text-blue-800">
+                                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/6b02e9ee-b522-441a-a9b1-a3ddb71238c5.png" alt="Refresh icon" class="mr-1 h-5 w-5"/>
+                                    Refresh
+                                </button>
+                            </div>
+                            
+                            <!-- Map Placeholder -->
+                            <div class="bg-gray-100 rounded-xl mb-6" style="height: 300px;">
+                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/c287f8b6-052b-4bc7-ac27-99448c49b512.png" alt="Map showing healthcare facility locations with markers for hospitals, clinics, and pharmacies" class="w-full h-full object-cover rounded-xl"/>
+                            </div>
+                            
+                            <!-- Facility Results -->
+                            <div class="space-y-4">
+                                <!-- Facility 1 -->
+                                <div class="border border-gray-200 rounded-xl p-4 flex flex-col md:flex-row hover:shadow-md transition-shadow">
+                                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/7351fcbb-c5f6-40d0-926e-6eb8b61b5c92.png" alt="City General Hospital building with modern glass facade and emergency entrance" class="h-40 w-full md:w-40 object-cover rounded-lg mb-4 md:mb-0 md:mr-4"/>
+                                    <div class="flex-1">
+                                        <div class="flex justify-between mb-2">
+                                            <h3 class="text-lg font-bold">City General Hospital</h3>
+                                            <div class="flex items-center">
+                                                <span class="text-yellow-400">★★★★☆</span>
+                                                <span class="text-gray-500 text-sm ml-1">(428)</span>
+                                            </div>
+                                        </div>
+                                        <p class="text-sm text-gray-600 mb-3">123 Medical Center Drive, Suite 450</p>
+                                        <div class="flex flex-wrap gap-2 mb-3">
+                                            <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Hospital</span>
+                                            <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Emergency</span>
+                                            <span class="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-full">Cardiology</span>
+                                        </div>
+                                        <div class="flex items-center text-sm text-gray-600">
+                                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/c0b82dc3-7be2-4ee2-847f-55a45ae341c5.png" alt="Location pin icon" class="mr-1 h-4 w-4"/>
+                                            0.8 miles away • Open 24 hours
+                                        </div>
+                                    </div>
+                                    <div class="mt-4 md:mt-0 md:ml-4 flex flex-col items-center justify-center">
+                                        <button class="bg-blue-600 text-white px-4 py-2 rounded-lg mb-2 hover:bg-blue-700">Directions</button>
+                                        <button class="text-blue-600 hover:text-blue-800 text-sm">View Details</button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Facility 2 -->
+                                <div class="border border-gray-200 rounded-xl p-4 flex flex-col md:flex-row hover:shadow-md transition-shadow">
+                                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/f0383ae6-f75a-4240-9d85-5d710cad69a6.png" alt="Metro Health Clinic entrance with clean white walls and red cross symbol" class="h-40 w-full md:w-40 object-cover rounded-lg mb-4 md:mb-0 md:mr-4"/>
+                                    <div class="flex-1">
+                                        <div class="flex justify-between mb-2">
+                                            <h3 class="text-lg font-bold">Metro Health Clinic</h3>
+                                            <div class="flex items-center">
+                                                <span class="text-yellow-400">★★★★★</span>
+                                                <span class="text-gray-500 text-sm ml-1">(312)</span>
+                                            </div>
+                                        </div>
+                                        <p class="text-sm text-gray-600 mb-3">456 Wellness Avenue, Building C</p>
+                                        <div class="flex flex-wrap gap-2 mb-3">
+                                            <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Clinic</span>
+                                            <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Pediatrics</span>
+                                            <span class="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-full">Family Medicine</span>
+                                        </div>
+                                        <div class="flex items-center text-sm text-gray-600">
+                                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/f9fc6cb3-6f26-4652-b780-3ec844d0ee93.png" alt="Location pin icon" class="mr-1 h-4 w-4"/>
+                                            1.3 miles away • Open until 8:00 PM
+                                        </div>
+                                    </div>
+                                    <div class="mt-4 md:mt-0 md:ml-4 flex flex-col items-center justify-center">
+                                        <button class="bg-blue-600 text-white px-4 py-2 rounded-lg mb-2 hover:bg-blue-700">Directions</button>
+                                        <button class="text-blue-600 hover:text-blue-800 text-sm">View Details</button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Facility 3 -->
+                                <div class="border border-gray-200 rounded-xl p-4 flex flex-col md:flex-row hover:shadow-md transition-shadow">
+                                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/cbb766e6-3542-476d-84cf-e94996f04305.png" alt="MediQuick Pharmacy interior with well-lit shelves of medications" class="h-40 w-full md:w-40 object-cover rounded-lg mb-4 md:mb-0 md:mr-4"/>
+                                    <div class="flex-1">
+                                        <div class="flex justify-between mb-2">
+                                            <h3 class="text-lg font-bold">MediQuick Pharmacy</h3>
+                                            <div class="flex items-center">
+                                                <span class="text-yellow-400">★★★★☆</span>
+                                                <span class="text-gray-500 text-sm ml-1">(145)</span>
+                                            </div>
+                                        </div>
+                                        <p class="text-sm text-gray-600 mb-3">789 Health Street, Suite 100</p>
+                                        <div class="flex flex-wrap gap-2 mb负法律责任3">
+                                            <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Pharmacy</span>
+                                            <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">24/7 Pickup</span>
+                                        </div>
+                                        <div class="flex items-center text-sm text-gray-600">
+                                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/e0dc94d9-5590-4528-bb16-a9c9f78a0339.png" alt="Location pin icon" class="mr-1 h-4 w-4"/>
+                                            0.5 miles away • Open until 10:00 PM
+                                        </div>
+                                    </div>
+                                    <div class="mt-4 md:mt-0 md:ml-4 flex flex-col items-center justify-center">
+                                        <button class="bg-blue-600 text-white px-4 py-2 rounded-lg mb-2 hover:bg-blue-700">Directions</button>
+                                        <button class="text-blue-600 hover:text-blue-800 text-sm">View Details</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl shadow-sm p-6">
+                            <h2 class="text-xl font-semibold mb-4">Recently Viewed Facilities</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="border border-gray-200 rounded-lg p-3 flex items-center">
+                                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/95cb2cea-fded-455a-a269-327ed012d9d8.png" alt="Heart Care Center logo with heart pulse line graphic" class="h-12 w-12 rounded-full mr-4"/>
+                                    <div>
+                                        <h3 class="font-medium">Heart Care Center</h3>
+                                        <p class="text-sm text-gray-600">Cardiology Specialists</p>
+                                    </div>
+                                </div>
+                                <div class="border border-gray-200 rounded-lg p-3 flex items-center">
+                                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/de89ed14-3f9f-47de-b0f8-6864b5a3cb13.png" alt="Downtown Diagnostics logo with microscope icon" class="h-12 w-12 rounded-full mr-4"/>
+                                    <div>
+                                        <h3 class="font-medium">Downtown Diagnostics</h3>
+                                        <p class="text-sm text-gray-600">Laboratory Services</p>
+                                    </div>
+                                </div>
+                                <div class="border border-gray-200 rounded-lg p-3 flex items-center">
+                                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/199fd1d6-3c85-45b3-81b1-e9ba8bfa5d75.png" alt="Pediatric Wellness Clinic logo with stethoscope graphic" class="h-12 w-12 rounded-full mr-4"/>
+                                    <div>
+                                        <h3 class="font-medium">Pediatric Wellness</h3>
+                                        <p class="text-sm text-gray-600">Children's Health</p>
+                                    </div>
+                                </div>
+                                <div class="border border-gray-200 rounded-lg p-3 flex items-center">
+                                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/59ce740e-65a2-4c12-9438-d0f8ec2ea2bb.png" alt="AllCity Urgent Care logo with first aid cross symbol" class="h-12 w-12 rounded-full mr-4"/>
+                                    <div>
+                                        <h3 class="font-medium">AllCity Urgent Care</h3>
+                                        <p class="text-sm text-gray-600">Walk-In Clinic</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Video Consultation Page -->
+    <div class="page" id="videoConsultation">
+        <div class="min-h-screen bg-gray-900">
+            <!-- Header -->
+            <header class="bg-gray-800 shadow-sm">
+                <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+                    <div class="flex items-center space-x-4">
+                        <button onclick="navigateTo('consultationPage')" class="text-gray-300 hover:text-white">
+                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/f59ed48c-fda2-465a-afbb-e72b30106aa2.png" alt="Back arrow icon" class="h-5 w-5"/>
+                        </button>
+                        <div class="flex items-center">
+                            <span class="text-xl font-bold text-white">Video Consultation</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <button class="text-gray-300 hover:text-white">
+                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/7ca15a19-3c56-4e61-a53b-c08cc360a76e.png" alt="Settings icon" class="h-5 w-5"/>
+                        </button>
+                        <button onclick="navigateTo('loginPage')" class="text-gray-300 hover:text-white">End Call</button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Content -->
+            <main class="container mx-auto px-4 py-8">
+                <div class="flex flex-col items-center justify-center mb-8">
+                    <div class="relative w-full max-w-4xl h-96 bg-gray-800 rounded-xl overflow-hidden mb-4">
+                        <!-- Remote Video -->
+                        <div class="absolute inset-0 bg-gray-700 flex items-center justify-center">
+                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/a2e2a609-0f29-44fd-a09f-98b30e1e2932.png" alt="Dr. Sarah Johnson video feed showing professional background" class="h-full w-full object-cover"/>
+                        </div>
+                        
+                        <!-- Local Video -->
+                        <div class="absolute bottom-4 right-4 w-32 h-32 bg-gray-900 rounded-lg overflow-hidden border-2 border-gray-600">
+                            <div class="absolute inset-0 bg-gray-800 flex items-center justify-center">
+                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/92e62259-39b8-49e1-ae44-6a51cc5c538b.png" alt="User's video feed thumbnail showing face and upper body" class="h-full w-full object-cover"/>
+                            </div>
+                        </div>
+                        
+                        <!-- Doctor Info -->
+                        <div class="absolute bottom-4 left-4 bg-black bg-opacity-50 text-white px-4 py-2 rounded-lg">
+                            <p class="font-medium">Dr. Sarah Johnson • General Practitioner</p>
+                            <p class="text-sm">Consultation in progress</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Call Controls -->
+                    <div class="flex space-x-4">
+                        <button class="bg-blue-600 text-white p-3 rounded-full hover:bg-blue-700">
+                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/ee18d81a-f3f7-4ee7-b532-8c1547870d92.png" alt="Microphone icon" class="h-5 w-5"/>
+                        </button>
+                        <button class="bg-red-600 text-white p-3 rounded-full hover:bg-red-700">
+                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/cff9fdbb-f39c-4293-a454-01d16e3866e4.png" alt="End call icon" class="h-5 w-5"/>
+                        </button>
+                        <button class="bg-blue-600 text-white p-3 rounded-full hover:bg-blue-700">
+                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/6cdc3a8f-3dcf-41be-9a9c-433f320b3081.png" alt="Video camera icon" class="h-5 w-5"/>
+                        </button>
+                        <button class="bg-blue-600 text-white p-3 rounded-full hover:bg-blue-700">
+                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/8274a013-bfbe-44cf-b6d4-5ffaf13ea80b.png" alt="Screen share icon" class="h-5 w-5"/>
+                        </button>
+                        <button class="bg-blue-600 text-white p-3 rounded-full hover:bg-blue-700">
+                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/315b70b1-f044-40d2-a79d-8a6907c19c71.png" alt="Chat bubble icon" class="h-5 w-5"/>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="max-w-4xl mx-auto bg-gray-800 rounded-xl p-6">
+                    <h3 class="text-lg font-semibold text-white mb-4">Consultation Notes</h3>
+                    <div class="bg-gray-900 rounded-lg p-4 mb-4">
+                        <p class="text-gray-300">Patient presenting with persistent headache and mild fever for 3 days. No other significant symptoms reported.</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <div class="bg-gray-900 rounded-lg p-4">
+                            <h4 class="font-medium text-gray-300 mb-2">Prescribed Medications</h4>
+                            <ul class="space-y-2">
+                                <li class="flex items-center">
+                                    <input type="checkbox" class="mr-2 rounded text-blue-600">
+                                    <span class="text-gray-300">Ibuprofen 400mg (3 days)</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <input type="checkbox" class="mr-2 rounded text-blue-600">
+                                    <span class="text-gray-300">Rest and hydration</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="bg-gray-900 rounded-lg p-4">
+                            <h4 class="font-medium text-gray-300 mb-2">Recommended Tests</h4>
+                            <ul class="space-y-2">
+                                <li class="flex items-center">
+                                    <input type="checkbox" class="mr-2 rounded text-blue-600">
+                                    <span class="text-gray-300">No tests recommended at this time</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-gray-300 mb-2">Additional Notes</label>
+                        <textarea class="w-full bg-gray-900 border border-gray-700 focus:border-blue-500 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-300" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="flex justify-end space-x-4 mt-4">
+                        <button class="bg-gray-700 text-white px-6 py-2 rounded-lg hover:bg-gray-600">Save Notes</button>
+                        <button class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">End Consultation</button>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Simple page navigation system
+        function navigateTo(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(pageId).classList.add('active');
+        }
+        
+        // Toggle between login and signup forms
+        function toggleAuthForm() {
+            const loginForm = document.getElementById('loginForm');
+            const signupForm = document.getElementById('signupForm');
+            
+            if (loginForm.classList.contains('hidden')) {
+                loginForm.classList.remove('hidden');
+                signupForm.classList.add('hidden');
+            } else {
+                loginForm.classList.add('hidden');
+                signupForm.classList.remove('hidden');
+            }
+        }
+        
+        // AI Chatbot functionality
+        function toggleChat() {
+            document.getElementById('aiBotChat').classList.toggle('active');
+        }
+        
+        function sendMessage() {
+            const input = document.getElementById('userMessage');
+            const messages = document.getElementById('chatMessages');
+            
+            if (input.value.trim() !== '') {
+                // Add user message
+                messages.innerHTML += `
+                    <div class="message user mb-3 text-right">
+                        <p class="inline-block bg-blue-600 text-white rounded-lg px-4 py-2">${input.value}</p>
+                    </div>
+                `;
+                
+                // Generate simple AI response
+                const responses = [
+                    "I can help answer your health-related questions. What would you like to know?",
+                    "Based on our conversation, I recommend consulting with a doctor for personalized advice.",
+                    "For your symptoms, I recommend rest and hydration. Monitor for worsening conditions.",
+                    "I can help you find nearby healthcare facilities if you'd like.",
+                    "Would you like me to review your medical reports with you?"
+                ];
+                
+                const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                
+                // Add AI response after a short delay
+                setTimeout(() => {
+                    messages.innerHTML += `
+                        <div class="message bot mb-3">
+                            <p class="inline-block bg-gray-200 rounded-lg px-4 py-2">${randomResponse}</p>
+                        </div>
+                    `;
+                    messages.scrollTop = messages.scrollHeight;
+                }, 800);
+                
+                input.value = '';
+                messages.scrollTop = messages.scrollHeight;
+            }
+        }
+        
+        // Handle form submissions
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            navigateTo('dashboardPage');
+        });
+        
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            navigateTo('dashboardPage');
+        });
+    </script>
+</body>
+</html>
+
